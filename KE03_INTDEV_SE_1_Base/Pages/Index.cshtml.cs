@@ -9,27 +9,38 @@ namespace KE03_INTDEV_SE_1_Base.Pages
     {
         private readonly ILogger<IndexModel> _logger;
         private readonly ICustomerRepository _customerRepository;
-        private readonly IProductRepository _productRepository;
 
-        public IList<Customer> Customers { get; set; }
-        public IList<Product> Products { get; set; }
+        [BindProperty]
+        public string UserName { get; set; } = string.Empty;
 
-        public IndexModel(ILogger<IndexModel> logger, ICustomerRepository customerRepository, IProductRepository productRepository)
+        public string? ErrorMessage { get; set; }
+
+        public IndexModel(ILogger<IndexModel> logger, ICustomerRepository customerRepository)
         {
             _logger = logger;
             _customerRepository = customerRepository;
-            _productRepository = productRepository;
-            Customers = new List<Customer>();
-            Products = new List<Product>();
         }
 
         public void OnGet()
         {
-            Customers = _customerRepository.GetAllCustomers().ToList();
-            Products = _productRepository.GetAllProducts().ToList();
+            // Alleen login tonen
+        }
 
-            _logger.LogInformation($"Getting all {Customers.Count} customers and {Products.Count} products");
+        public IActionResult OnPost()
+        {
+            var customer = _customerRepository.GetAllCustomers()
+                .FirstOrDefault(c => c.Name.Equals(UserName, StringComparison.OrdinalIgnoreCase));
+
+            if (customer != null)
+            {
+                // Redirect naar Home met gebruikersnaam als querystring
+                return RedirectToPage("Home", new { UserName = customer.Name });
+            }
+            else
+            {
+                ErrorMessage = "Gebruikersnaam niet gevonden.";
+                return Page();
+            }
         }
     }
-
 }
