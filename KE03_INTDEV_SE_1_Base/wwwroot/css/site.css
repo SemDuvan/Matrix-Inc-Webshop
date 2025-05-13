@@ -18,5 +18,20 @@ html {
 }
 
 body {
-  margin-bottom: 60px;
+    margin-bottom: 60px;
 }
+
+.nav-item{
+
+    border-radius:10px;
+
+}
+
+.nav-item:hover {
+     box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+    background-color: #fff; 
+     transition: box-shadow 0.3s, background-color 0.3s;
+    }
+
+
+
