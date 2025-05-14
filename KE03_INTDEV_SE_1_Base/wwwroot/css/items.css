@@ -55,14 +55,14 @@
 }
 
 
-.btn {
+.btnhover {
     border-radius: 5px;
     transition:transform .3s;
     width:150px;
 
 }
 
-    .btn:hover {
+    .btnhover:hover {
         transform: scale(1.1);
     }
 

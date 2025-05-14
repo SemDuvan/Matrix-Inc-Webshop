@@ -31,7 +31,7 @@
                             <h5 class="card-title font-weight-bold">@product.Name</h5>
                             <p class="card-text">€@product.Price</p>
                             <button type="button"
-                                    class="btn details px-auto"
+                                    class="btnhover btn details px-auto"
                                     data-bs-toggle="modal"
                                     data-bs-target="#productModal"
                                     data-name="@product.Name"
@@ -41,7 +41,7 @@
                                 Bekijk details
                             </button>
                             <br />
-                            <button class="btn cart px-auto bg-dark" type="button"
+                            <button class="btnhover btn cart px-auto bg-dark" type="button"
                                     data-id="@product.Id"
                                     data-name="@product.Name"
                                     data-price="@product.Price"
@@ -70,7 +70,7 @@
                         <h5 id="modalTitle" class="modal-title mb-3"></h5>
                         <p id="modalPrice" class="mb-2"></p>
                         <p id="modalDescription"></p>
-                        <button type="button" class="btn btn-secondary mt-3" data-bs-dismiss="modal">Sluiten</button>
+                        <button type="button" class="btnhover btn-secondary mt-3" data-bs-dismiss="modal">Sluiten</button>
                     </div>
                 </div>
             </div>

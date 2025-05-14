@@ -30,15 +30,20 @@ function updateCartUI() {
     if (cart.length === 0) {
         dropdown.innerHTML = '<li class="dropdown-item text-muted">Winkelkar is leeg</li>';
     } else {
-        cart.forEach(item => {
+        cart.forEach((item, index) => {
             dropdown.innerHTML += `
-                        <li class="dropdown-item d-flex align-items-center">
-                            <img src="${item.imgSrc}" style="width:40px;height:30px;object-fit:cover;margin-right:8px;" />
-                            <span>${item.name}</span>
-                            <span class="ms-auto">x ${item.quantity}</span>
-                            <span class="ms-2">€${item.price.toFixed(2)}</span>
-                        </li>`;
+        <li class="dropdown-item d-flex align-items-center">
+            <img src="${item.imgSrc}" style="width:40px;height:30px;object-fit:cover;margin-right:8px;" />
+            <span class="me-2">${item.name}</span>
+            <button type="button" class="btn btn-sm btn-light ms-2 px-2 py-0" onclick="decrementCartItem(${item.id}); event.stopPropagation(); return false;">-</button>
+            <span class="mx-2">${item.quantity}</span>
+            <button type="button" class="btn btn-sm btn-light px-2 py-0" onclick="incrementCartItem(${item.id}); event.stopPropagation(); return false;">+</button>
+            <span class="ms-2">€${item.price.toFixed(2)}</span>
+            <button type="button" class="btn btn-sm btn-danger ms-2 px-2 py-0" onclick="removeCartItem(${item.id}); event.stopPropagation(); return false;">&times;</button>
+        </li>`;
         });
+
+
     }
     dropdown.innerHTML += '<li><hr class="dropdown-divider" /></li>';
 
@@ -49,3 +54,33 @@ function updateCartUI() {
 
 document.addEventListener('DOMContentLoaded', updateCartUI);
 window.updateCartUI = updateCartUI;
+
+function incrementCartItem(id) {
+    let cart = JSON.parse(sessionStorage.getItem('cart') || '[]');
+    let item = cart.find(i => i.id === id);
+    if (item) {
+        item.quantity += 1;
+        sessionStorage.setItem('cart', JSON.stringify(cart));
+        if (window.updateCartUI) window.updateCartUI();
+    }
+}
+
+function decrementCartItem(id) {
+    let cart = JSON.parse(sessionStorage.getItem('cart') || '[]');
+    let item = cart.find(i => i.id === id);
+    if (item) {
+        item.quantity -= 1;
+        if (item.quantity <= 0) {
+            cart = cart.filter(i => i.id !== id);
+        }
+        sessionStorage.setItem('cart', JSON.stringify(cart));
+        if (window.updateCartUI) window.updateCartUI();
+    }
+}
+
+function removeCartItem(id) {
+    let cart = JSON.parse(sessionStorage.getItem('cart') || '[]');
+    cart = cart.filter(i => i.id !== id);
+    sessionStorage.setItem('cart', JSON.stringify(cart));
+    if (window.updateCartUI) window.updateCartUI();
+}
