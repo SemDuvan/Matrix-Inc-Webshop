@@ -10,8 +10,21 @@
             @foreach (var product in Model.Products)
             {
                 <div class="card mx-3 col-md-3 col-10 mt-5">
+                    @{
+                        string imgSrc;
+                        if (product.Img != null && product.Img.Length > 0)
+                        {
+                            var base64 = Convert.ToBase64String(product.Img);
+                            imgSrc = $"data:image/png;base64,{base64}";
+                        }
+                        else
+                        {
+                            imgSrc = "https://via.placeholder.com/300x200?text=Geen+afbeelding";
+                        }
+                    }
                     <img class="mx-auto img-thumbnail"
-                         src="https://via.placeholder.com/300x200?text=Geen+afbeelding" />
+                         src="@imgSrc"
+                         alt="Productfoto" style="max-height:200px; max-width:300px;" />
                     <div class="card-body text-center mx-auto">
                         <div class='cvp'>
                             <h5 class="card-title font-weight-bold">@product.Name</h5>
@@ -23,7 +36,7 @@
                                     data-name="@product.Name"
                                     data-price="€@product.Price"
                                     data-description="@product.Description"
-                                    data-image="https://via.placeholder.com/300x200?text=Geen+afbeelding">
+                                    data-image="@imgSrc">
                                 Bekijk details
                             </button>
                             <br />
@@ -54,7 +67,4 @@
             </div>
         </div>
     </div>
-
-
-    
 }
