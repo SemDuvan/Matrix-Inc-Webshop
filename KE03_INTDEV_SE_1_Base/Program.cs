@@ -24,6 +24,7 @@ namespace KE03_INTDEV_SE_1_Base
 
             // Add services to the container.
             builder.Services.AddRazorPages();
+            builder.Services.AddSingleton<CartService>();
             builder.Services.AddSession();
 
             var app = builder.Build();

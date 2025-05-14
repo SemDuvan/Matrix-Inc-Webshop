@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/KE03_INTDEV_SE_1_Base.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
 </head>
 <body>
     @{
@@ -26,7 +27,7 @@
                     <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                         <ul class="navbar-nav flex-grow-1">
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-page="/Index">Home</a>
+                                <a class="nav-link text-dark" asp-area="" asp-page="/Home">Home</a>
                             </li>
                             <li class="nav-item ms-3">
                                 <a class="nav-link text-dark" asp-area="" asp-page="/Bestellingen">Bestellingen</a>
@@ -34,11 +35,19 @@
                             <li class="nav-item ms-3">
                                 <a class="nav-link text-dark" asp-area="" asp-page="/Privacy">Privacy</a>
                             </li>
-                            <li class="nav-item ms-auto ms-3">
-                                <a class="nav-link position-relative" asp-area="" asp-page="/Winkelkar">
-                                    <span class="bi bi-cart"></span> Winkelkart
+                            <li class="nav-item dropdown ms-auto ms-3">
+                                <a class="nav-link position-relative dropdown-toggle" href="#" id="cartDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <span class="bi bi-cart"></span> Winkelkar
                                     <span class="badge bg-danger position-absolute top-0 start-100 translate-middle" id="cart-count">0</span>
                                 </a>
+                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="cartDropdown" style="min-width: 320px;" id="cart-dropdown-list">
+                                    <li class="dropdown-item text-muted">Winkelkar is leeg</li>
+                                    <li><hr class="dropdown-divider" /></li>
+                                    <li class="dropdown-item fw-bold" id="cart-total">Totaal: €0,00</li>
+                                    <li class="dropdown-item">
+                                        <a href="/Winkelkar" class="btn btn-primary w-100">Bestellen</a>
+                                    </li>
+                                </ul>
                             </li>
                         </ul>
                     </div>
@@ -66,8 +75,6 @@
         </div>
     }
 
-
-
     <footer class="border-top footer text-muted">
         <div class="container">
             &copy; 2025 - KE03_INTDEV_SE_1_Base - <a asp-area="" asp-page="/Privacy">Privacy</a>
@@ -77,6 +84,8 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/Cart.js"></script>
+
 
     @await RenderSectionAsync("Scripts", required: false)
 </body>
