@@ -24,6 +24,7 @@ namespace KE03_INTDEV_SE_1_Base
 
             // Add services to the container.
             builder.Services.AddRazorPages();
+            builder.Services.AddSession();
 
             var app = builder.Build();
 
@@ -48,6 +49,8 @@ namespace KE03_INTDEV_SE_1_Base
             app.UseStaticFiles();
 
             app.UseRouting();
+
+            app.UseSession();
 
             app.UseAuthorization();
 

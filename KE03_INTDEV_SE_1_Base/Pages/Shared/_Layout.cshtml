@@ -35,7 +35,7 @@
                                 <a class="nav-link text-dark" asp-area="" asp-page="/Privacy">Privacy</a>
                             </li>
                             <li class="nav-item ms-auto ms-3">
-                                <a class="nav-link position-relative" asp-area="" asp-page="/Winkelkart">
+                                <a class="nav-link position-relative" asp-area="" asp-page="/Winkelkar">
                                     <span class="bi bi-cart"></span> Winkelkart
                                     <span class="badge bg-danger position-absolute top-0 start-100 translate-middle" id="cart-count">0</span>
                                 </a>
@@ -47,11 +47,26 @@
         </header>
     }
 
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
+    @if (ViewData["NoBackground"] as bool? == true)
+    {
+        <div class="container">
+            <main role="main" class="pb-3">
+                @RenderBody()
+            </main>
+        </div>
+    }
+    else
+    {
+        <div class="background-wrapper bg-dark">
+            <div class="container text-white">
+                <main role="main" class="pb-3">
+                    @RenderBody()
+                </main>
+            </div>
+        </div>
+    }
+
+
 
     <footer class="border-top footer text-muted">
         <div class="container">

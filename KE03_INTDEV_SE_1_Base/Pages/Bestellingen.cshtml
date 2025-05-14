@@ -1,4 +1,34 @@
 ﻿@page
-@model KE03_INTDEV_SE_1_Base.Pages.Index1Model
-@{
+@model KE03_INTDEV_SE_1_Base.Pages.BestellingenModel
+
+<h2>Jouw bestellingen</h2>
+
+@if (Model.Orders != null && Model.Orders.Any())
+{
+    <ul>
+        @foreach (var order in Model.Orders)
+        {
+            <li>
+                <strong>Besteld op:</strong> @order.OrderDate.ToString("dd-MM-yyyy")<br />
+                <strong>Producten:</strong>
+                @if (order.Products != null && order.Products.Any())
+                {
+                    <ul>
+                        @foreach (var product in order.Products)
+                        {
+                            <li>@product.Name</li>
+                        }
+                    </ul>
+                }
+                else
+                {
+                    <span>Geen producten in deze bestelling.</span>
+                }
+            </li>
+        }
+    </ul>
+}
+else
+{
+    <p>Je hebt nog geen bestellingen geplaatst.</p>
 }

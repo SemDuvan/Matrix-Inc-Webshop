@@ -1,39 +1,32 @@
 using DataAccessLayer.Interfaces;
 using DataAccessLayer.Models;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.Collections.Generic;
 
 namespace KE03_INTDEV_SE_1_Base.Pages
 {
     public class HomeModel : PageModel
     {
+        private readonly IProductRepository _productRepository;
         private readonly ICustomerRepository _customerRepository;
 
         public Customer? Customer { get; set; }
+        public List<Product> Products { get; set; } = new();
 
-        public HomeModel(ICustomerRepository customerRepository)
+        public HomeModel(ICustomerRepository customerRepository, IProductRepository productRepository)
         {
             _customerRepository = customerRepository;
+            _productRepository = productRepository;
         }
 
-        public IActionResult OnGet(string? userName)
+        public void OnGet(string? userName)
         {
-            if (string.IsNullOrEmpty(userName))
+            if (!string.IsNullOrEmpty(userName))
             {
-                // Geen gebruikersnaam meegegeven, terug naar login
-                return RedirectToPage("Index");
+                Customer = _customerRepository.GetAllCustomers()
+                    .FirstOrDefault(c => c.Name.Equals(userName, StringComparison.OrdinalIgnoreCase));
             }
-
-            Customer = _customerRepository.GetAllCustomers()
-                .FirstOrDefault(c => c.Name.Equals(userName, StringComparison.OrdinalIgnoreCase));
-
-            if (Customer == null)
-            {
-                // Gebruiker niet gevonden, terug naar login
-                return RedirectToPage("Index");
-            }
-
-            return Page();
+            Products = _productRepository.GetAllProducts().ToList();
         }
     }
 }

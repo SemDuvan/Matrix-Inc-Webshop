@@ -2,6 +2,7 @@ using DataAccessLayer.Interfaces;
 using DataAccessLayer.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Http;
 
 namespace KE03_INTDEV_SE_1_Base.Pages
 {
@@ -33,6 +34,9 @@ namespace KE03_INTDEV_SE_1_Base.Pages
 
             if (customer != null)
             {
+                // Zet de gebruikersnaam in de session
+                HttpContext.Session.SetString("UserName", customer.Name);
+
                 // Redirect naar Home met gebruikersnaam als querystring
                 return RedirectToPage("Home", new { UserName = customer.Name });
             }
@@ -42,5 +46,6 @@ namespace KE03_INTDEV_SE_1_Base.Pages
                 return Page();
             }
         }
+
     }
 }

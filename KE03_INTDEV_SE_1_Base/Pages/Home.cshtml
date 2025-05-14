@@ -1,43 +1,60 @@
 ﻿@page
 @model KE03_INTDEV_SE_1_Base.Pages.HomeModel
 
-@{
-    ViewData["Title"] = "Home";
-}
-
-@if (Model.Customer != null)
+@if (Model.Products != null && Model.Products.Any())
 {
-    <h2>Welkom, @Model.Customer.Name!</h2>
+    <link rel="stylesheet" href="~/css/items.css" />
 
-    <h3>Bestellingen:</h3>
-    @if (Model.Customer.Orders != null && Model.Customer.Orders.Any())
-    {
-        <ul>
-            @foreach (var order in Model.Customer.Orders)
+    <div class="container-fluid">
+        <div class="row justify-content-center">
+            @foreach (var product in Model.Products)
             {
-                <li>
-                    <strong>Besteld op:</strong> @order.OrderDate.ToString("dd-MM-yyyy")<br />
-                    <strong>Producten:</strong>
-                    @if (order.Products != null && order.Products.Any())
-                    {
-                        <ul>
-                            @foreach (var product in order.Products)
-                            {
-                                <li>@product.Name</li>
-                            }
-                        </ul>
-                    }
-                    else
-                    {
-                        <span>Geen producten in deze bestelling.</span>
-                    }
-                </li>
+                <div class="card mx-3 col-md-3 col-10 mt-5">
+                    <img class="mx-auto img-thumbnail"
+                         src="https://via.placeholder.com/300x200?text=Geen+afbeelding" />
+                    <div class="card-body text-center mx-auto">
+                        <div class='cvp'>
+                            <h5 class="card-title font-weight-bold">@product.Name</h5>
+                            <p class="card-text">€@product.Price</p>
+                            <button type="button"
+                                    class="btn details px-auto"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#productModal"
+                                    data-name="@product.Name"
+                                    data-price="€@product.Price"
+                                    data-description="@product.Description"
+                                    data-image="https://via.placeholder.com/300x200?text=Geen+afbeelding">
+                                Bekijk details
+                            </button>
+                            <br />
+                            <button class="btn cart px-auto bg-dark" type="button" data-product-id="@product.Id">
+                                Toevoegen aan cart
+                            </button>
+                        </div>
+                    </div>
+                </div>
             }
-        </ul>
-    }
-    else
-    {
-        <p>Geen bestellingen gevonden.</p>
-    }
-}
+        </div>
+    </div>
 
+    <div class="modal fade" id="productModal" tabindex="-1" aria-labelledby="productModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body d-flex p-0">
+                    <div class="col-md-5 d-flex align-items-center justify-content-center bg-light">
+                        <img id="modalImage" src="https://via.placeholder.com/300x200?text=Geen+afbeelding" class="img-fluid" alt="Productfoto" />
+                    </div>
+                    <div class="col-md-7 p-4">
+                        <h5 id="modalTitle" class="modal-title mb-3"></h5>
+                        <p id="modalPrice" class="mb-2"></p>
+                        <p id="modalDescription"></p>
+                        <button type="button" class="btn btn-secondary mt-3" data-bs-dismiss="modal">Sluiten</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    
+}
