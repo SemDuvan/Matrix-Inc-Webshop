@@ -93,3 +93,9 @@
     margin-bottom: 4px;
 }
 
+#productModal .modal-content,
+#productModal .modal-body,
+#productModal .modal-title,
+#productModal p {
+    color: #212121 !important;
+}
