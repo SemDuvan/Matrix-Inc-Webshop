@@ -4,10 +4,19 @@
 @if (Model.Products != null && Model.Products.Any())
 {
     <link rel="stylesheet" href="~/css/items.css" />
-
+    
     <div class="container-fluid">
+        
         <div class="row justify-content-center">
-            <h3 class="titlee">Producten:</h3>
+            <div>
+                <h1 class="text-center mt-5">
+                    Welkom @(Model.UserName ?? "gast")
+                </h1>
+
+                <p class="text-center">Hier zijn onze producten:</p>
+            </div>
+
+            
             @foreach (var product in Model.Products)
             {
                 <div class="card mx-3 col-md-3 col-10 mt-5">
@@ -20,7 +29,7 @@
                         }
                         else
                         {
-                            imgSrc = "https://via.placeholder.com/300x200?text=Geen+afbeelding";
+                            imgSrc = "https://via.placeholder.com/500x500?text=Geen+afbeelding";
                         }
                     }
                     <img class="mx-auto img-thumbnail"
@@ -35,7 +44,7 @@
                                     data-bs-toggle="modal"
                                     data-bs-target="#productModal"
                                     data-name="@product.Name"
-                                    data-price="€@product.Price"
+                                    data-price="@product.Price.ToString(System.Globalization.CultureInfo.InvariantCulture)"
                                     data-description="@product.Description"
                                     data-image="@imgSrc">
                                 Bekijk details
@@ -44,7 +53,7 @@
                             <button class="btnhover btn cart px-auto bg-dark" type="button"
                                     data-id="@product.Id"
                                     data-name="@product.Name"
-                                    data-price="@product.Price"
+                                    data-price="@product.Price.ToString(System.Globalization.CultureInfo.InvariantCulture)"
                                     data-imgsrc="@imgSrc"
                                     onclick="addProductFromButton(this)">
                                 Toevoegen aan cart

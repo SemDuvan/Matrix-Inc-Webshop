@@ -21,12 +21,23 @@ namespace KE03_INTDEV_SE_1_Base.Pages
 
         public void OnGet(string? userName)
         {
+            // Haal uit session als userName niet is meegegeven
+            if (string.IsNullOrEmpty(userName))
+                userName = HttpContext.Session.GetString("UserName");
+
             if (!string.IsNullOrEmpty(userName))
             {
                 Customer = _customerRepository.GetAllCustomers()
                     .FirstOrDefault(c => c.Name.Equals(userName, StringComparison.OrdinalIgnoreCase));
             }
             Products = _productRepository.GetAllProducts().ToList();
+            UserName = userName;
         }
+
+
+        public string? UserName { get; set; }
+
+     
+
     }
 }

@@ -31,4 +31,6 @@ public class CartService
 
     public int TotalCount => items.Sum(i => i.Quantity);
     public decimal TotalPrice => items.Sum(i => i.Price * i.Quantity);
+
+    
 }

@@ -84,3 +84,11 @@ function removeCartItem(id) {
     sessionStorage.setItem('cart', JSON.stringify(cart));
     if (window.updateCartUI) window.updateCartUI();
 }
+
+function showOrderConfirmation() {
+    showCartToast("Je bestelling is geplaatst en wordt verwerkt!");
+    sessionStorage.removeItem('cart');
+    if (window.updateCartUI) window.updateCartUI();
+}
+
+
