@@ -1,12 +1,15 @@
 ﻿
+using System.Text.Json.Serialization;
+
 public class CartItem
 {
+    [JsonPropertyName("id")]
     public int ProductId { get; set; }
-    public string Name { get; set; } = "";
+    public string Name { get; set; }
     public decimal Price { get; set; }
-    public int Quantity { get; set; }
-    public string ImgSrc { get; set; } = "";
+    public int Quantity { get; set; } = 1;
 }
+
 
 public class CartService
 {

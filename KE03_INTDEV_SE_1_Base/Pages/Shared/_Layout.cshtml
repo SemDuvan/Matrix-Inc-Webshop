@@ -45,9 +45,18 @@
                                     <li><hr class="dropdown-divider" /></li>
                                     <li class="dropdown-item fw-bold" id="cart-total">Totaal: €0,00</li>
                                     <li class="dropdown-item">
-                                        <button type="button" class="btn btn-primary w-100" onclick="showOrderConfirmation()">Bestellen</button>
+                                        <form method="post" action="/Bestellen?handler=PlaatsBestelling" id="cartFormDropdown">
+                                            @Html.AntiForgeryToken()
+                                            <button type="submit" class="btn btn-primary w-100">Bestellen</button>
+                                        </form>
+
+
+
+
                                     </li>
                                 </ul>
+                                
+
                             </li>
                         </ul>
                     </div>

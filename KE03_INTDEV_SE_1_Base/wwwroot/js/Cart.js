@@ -21,8 +21,6 @@ function addToCart(product) {
     showCartToast(product.name + " toegevoegd aan winkelkar!");
 }
 
-
-
 function showCartToast(message) {
     let toast = document.createElement('div');
     toast.textContent = message;
