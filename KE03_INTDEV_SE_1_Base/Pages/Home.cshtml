@@ -1,91 +1,100 @@
 ﻿@page
 @model KE03_INTDEV_SE_1_Base.Pages.HomeModel
 
+<link rel="stylesheet" href="~/css/items.css" />
+
+
+
+@if (TempData["CartMessage"] != null)
+{
+    <div id="cartAlert" class="alert alert-success text-center cart-alert-fixed">
+        @TempData["CartMessage"]
+    </div>
+    <script>
+        setTimeout(function() {
+            var alert = document.getElementById('cartAlert');
+            if(alert) alert.classList.add('hide');
+        }, 4000);
+    </script>
+}
+
+
 @if (Model.Products != null && Model.Products.Any())
 {
-    <link rel="stylesheet" href="~/css/items.css" />
-    
     <div class="container-fluid">
-        
         <div class="row justify-content-center">
             <div>
                 <h1 class="text-center mt-5">
                     Welkom @(Model.UserName ?? "gast")
                 </h1>
-
                 <p class="text-center">Hier zijn onze producten:</p>
             </div>
 
-            
             @foreach (var product in Model.Products)
             {
+                var modalId = $"productModal_{product.Id}";
+                string imgSrc;
+                if (product.Img != null && product.Img.Length > 0)
+                {
+                    var base64 = Convert.ToBase64String(product.Img);
+                    imgSrc = $"data:image/png;base64,{base64}";
+                }
+                else
+                {
+                    imgSrc = "https://via.placeholder.com/500x500?text=Geen+afbeelding";
+                }
                 <div class="card mx-3 col-md-3 col-10 mt-5">
-                    @{
-                        string imgSrc;
-                        if (product.Img != null && product.Img.Length > 0)
-                        {
-                            var base64 = Convert.ToBase64String(product.Img);
-                            imgSrc = $"data:image/png;base64,{base64}";
-                        }
-                        else
-                        {
-                            imgSrc = "https://via.placeholder.com/500x500?text=Geen+afbeelding";
-                        }
-                    }
                     <img class="mx-auto img-thumbnail"
                          src="@imgSrc"
                          alt="Productfoto" style="max-height:200px; max-width:300px;" />
-                    <div class="card-body text-center mx-auto">
-                        <div class='cvp'>
-                            <h5 class="card-title font-weight-bold">@product.Name</h5>
-                            <p class="card-text">€@product.Price</p>
+                    <div class="card-body">
+                        <h5 class="card-title font-weight-bold text-center">@product.Name</h5>
+                        <p class="card-text text-center">€@product.Price</p>
+                        <div class="d-grid gap-2 text-center">
                             <button type="button"
-                                    class="btnhover btn details px-auto"
+                                    class="btnhover btn details mx-auto"
                                     data-bs-toggle="modal"
-                                    data-bs-target="#productModal"
-                                    data-name="@product.Name"
-                                    data-price="@product.Price.ToString(System.Globalization.CultureInfo.InvariantCulture)"
-                                    data-description="@product.Description"
-                                    data-image="@imgSrc">
+                                    data-bs-target="#@modalId">
                                 Bekijk details
                             </button>
-                            <br />
-                            <button class="btnhover btn cart px-auto bg-dark" type="button"
-                                    data-id="@product.Id"
-                                    data-name="@product.Name"
-                                    data-price="@product.Price.ToString(System.Globalization.CultureInfo.InvariantCulture)"
-                                    data-imgsrc="@imgSrc"
-                                    onclick="addProductFromButton(this)">
-                                Toevoegen aan cart
-                            </button>
+                            <form method="post" asp-page-handler="AddToCart">
+                                <input type="hidden" name="ProductId" value="@product.Id" />
+                                <button type="submit" class="btnhover btn cart bg-dark text-white w-100 mx-auto">
+                                    Toevoegen aan winkelwagen
+                                </button>
+                            </form>
+                        </div>
+                    </div>
 
+                </div>
 
+             
 
+                <!-- Modal voor dit product -->
+                <div class="modal fade" id="@modalId" tabindex="-1" aria-labelledby="@($"{modalId}Label")" aria-hidden="true">
+                    <div class="modal-dialog modal-xl modal-dialog-centered">
+                        <div class="modal-content rounded-4">
+                            <div class="modal-body d-flex p-0">
+                                <div class="col-md-5 d-flex align-items-center justify-content-center bg-light" style="margin-left: 24px; margin-top: 24px; margin-bottom: 24px;">
+                                    <img src="@imgSrc" class="img-fluid rounded-4" alt="Productfoto" />
+                                </div>
+                                <div class="col-md-7 p-4">
+                                    <h5 class="modal-title mb-3 text-black">@product.Name</h5>
+                                    <p class="mb-2 text-black">€@product.Price</p>
+                                    <p class="text-black">@product.Description</p>
+                                    <button type="button" class="btnhover btn details px-auto" data-bs-dismiss="modal">
+                                        Sluiten
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             }
         </div>
     </div>
-
-    <div class="modal fade" id="productModal" tabindex="-1" aria-labelledby="productModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-xl modal-dialog-centered">
-            <div class="modal-content rounded-4">
-                <div class="modal-body d-flex p-0">
-                    <div class="col-md-5 d-flex align-items-center justify-content-center bg-light" style="margin-left: 24px; margin-top: 24px; margin-bottom: 24px;">
-                        <img id="modalImage" src="https://via.placeholder.com/300x200?text=Geen+afbeelding" class="img-fluid rounded-4" alt="Productfoto" />
-                    </div>
-                    <div class="col-md-7 p-4">
-                        <h5 id="modalTitle" class="modal-title mb-3"></h5>
-                        <p id="modalPrice" class="mb-2"></p>
-                        <p id="modalDescription"></p>
-                        <button type="button" class="btnhover btn-secondary mt-3" data-bs-dismiss="modal">Sluiten</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    
-
+}
+else
+{
+    <p class="text-center">Geen producten gevonden.</p>
 }

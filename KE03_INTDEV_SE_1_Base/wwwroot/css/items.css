@@ -58,7 +58,7 @@
 .btnhover {
     border-radius: 5px;
     transition:transform .3s;
-    width:150px;
+    
 
 }
 
@@ -106,3 +106,21 @@
     padding:25px;
     align-content:center;
 }
+
+.cart-alert-fixed {
+    position: fixed;
+    top: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1055;
+    min-width: 300px;
+    max-width: 90vw;
+    opacity: 1;
+    transition: opacity 0.5s;
+    pointer-events: none;
+}
+
+    .cart-alert-fixed.hide {
+        opacity: 0;
+        transition: opacity 0.5s;
+    }

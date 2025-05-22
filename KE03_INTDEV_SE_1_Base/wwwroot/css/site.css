@@ -2,6 +2,7 @@ html {
   font-size: 14px;
 }
 
+
 @media (min-width: 768px) {
   html {
     font-size: 16px;
@@ -38,3 +39,5 @@ body {
     min-height: 100vh;
     width: 100%;
 }
+
+

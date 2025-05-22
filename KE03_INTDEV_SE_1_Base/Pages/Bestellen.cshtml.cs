@@ -1,7 +1,7 @@
 using DataAccessLayer.Interfaces;
 using DataAccessLayer.Models;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Text.Json;
 
 namespace KE03_INTDEV_SE_1_Base.Pages
@@ -11,6 +11,8 @@ namespace KE03_INTDEV_SE_1_Base.Pages
         private readonly IOrderRepository _orderRepository;
         private readonly ICustomerRepository _customerRepository;
         private readonly IProductRepository _productRepository;
+
+        public List<CartItem> Cart { get; set; } = new();
 
         public BestellenModel(
             IOrderRepository orderRepository,
@@ -22,33 +24,35 @@ namespace KE03_INTDEV_SE_1_Base.Pages
             _productRepository = productRepository;
         }
 
-        [BindProperty]
-        public string CartJson { get; set; } = "";
+        public void OnGet()
+        {
+            var cartJson = HttpContext.Session.GetString("Cart");
+            Cart = string.IsNullOrEmpty(cartJson)
+                ? new List<CartItem>()
+                : JsonSerializer.Deserialize<List<CartItem>>(cartJson) ?? new List<CartItem>();
+        }
 
-        public IActionResult OnPostPlaatsBestelling()
+        public IActionResult OnPost()
         {
             var userName = HttpContext.Session.GetString("UserName");
             var customer = _customerRepository.GetAllCustomers()
-                .FirstOrDefault(c => c.Name == userName);
+                .FirstOrDefault(c => c.Name.Equals(userName, StringComparison.OrdinalIgnoreCase));
 
             if (customer == null)
             {
-                return new JsonResult(new { success = false, message = "Geen geldige klant gevonden." });
+                TempData["OrderMessage"] = "Geen geldige klant gevonden.";
+                return RedirectToPage();
             }
 
-            List<CartItem>? cartItems = null;
-            try
-            {
-                cartItems = JsonSerializer.Deserialize<List<CartItem>>(CartJson);
-            }
-            catch
-            {
-                return new JsonResult(new { success = false, message = "Ongeldige winkelwagen data." });
-            }
+            var cartJson = HttpContext.Session.GetString("Cart");
+            var cart = string.IsNullOrEmpty(cartJson)
+                ? new List<CartItem>()
+                : JsonSerializer.Deserialize<List<CartItem>>(cartJson) ?? new List<CartItem>();
 
-            if (cartItems == null || cartItems.Count == 0)
+            if (cart.Count == 0)
             {
-                return new JsonResult(new { success = false, message = "Winkelwagen is leeg." });
+                TempData["OrderMessage"] = "Je winkelwagen is leeg.";
+                return RedirectToPage();
             }
 
             var order = new Order
@@ -58,9 +62,9 @@ namespace KE03_INTDEV_SE_1_Base.Pages
                 Customer = customer
             };
 
-            foreach (var cartItem in cartItems)
+            foreach (var item in cart)
             {
-                var product = _productRepository.GetProductById(cartItem.ProductId);
+                var product = _productRepository.GetProductById(item.ProductId);
                 if (product != null)
                 {
                     order.Products.Add(product);
@@ -69,8 +73,11 @@ namespace KE03_INTDEV_SE_1_Base.Pages
 
             _orderRepository.AddOrder(order);
 
-            // Geef een JSON-resultaat terug in plaats van een redirect
-            return new JsonResult(new { success = true, message = "Bestelling geplaatst!" });
+            // Leeg de winkelwagen
+            HttpContext.Session.Remove("Cart");
+
+            TempData["OrderMessage"] = "Bestelling geplaatst!";
+            return RedirectToPage("/Bestellingen");
         }
     }
 }

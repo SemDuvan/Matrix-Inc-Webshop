@@ -1,0 +1,12 @@
+﻿@using System.Text.Json
+@using DataAccessLayer.Models
+@{
+    var cartJson = Context.Session.GetString("Cart");
+    var cart = string.IsNullOrEmpty(cartJson)
+        ? new List<CartItem>()
+        : JsonSerializer.Deserialize<List<CartItem>>(cartJson) ?? new List<CartItem>();
+}
+<span class="badge bg-danger position-absolute top-0 start-100 translate-middle" id="cart-count">
+    @cart.Sum(c => c.Quantity)
+</span>
+

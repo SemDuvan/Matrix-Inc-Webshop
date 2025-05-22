@@ -1,0 +1,28 @@
+﻿body, .text-white {
+    color: #fff !important;
+}
+
+.bg-dark {
+    background-color: #181a1b !important;
+}
+
+
+.card {
+    background: rgba(24,26,27,0.95);
+}
+
+.list-group-item {
+    background: transparent !important;
+}
+
+.text-white, .card, .list-group-item, .card-header {
+    color: #fff !important;
+}
+
+.bg-dark, .card, .list-group-item, .card-header {
+    background-color: #181a1b !important;
+}
+
+.border-light {
+    border-color: #fff !important;
+}

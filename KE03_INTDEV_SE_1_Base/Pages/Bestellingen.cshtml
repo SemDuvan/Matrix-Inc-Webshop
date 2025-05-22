@@ -1,36 +1,51 @@
 ﻿@page
 @model KE03_INTDEV_SE_1_Base.Pages.BestellingenModel
 
-<h2>Jouw bestellingen</h2>
+<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+<link rel="stylesheet" href="/css/winkelwagen.css" />
 
-@if (Model.Orders != null && Model.Orders.Any())
-{
-    <ul>
-        @foreach (var order in Model.Orders)
-        {
-            <li>
-                <strong>Besteld op:</strong> @order.OrderDate.ToString("dd-MM-yyyy")<br />
-                <strong>Producten:</strong>
-                @if (order.Products != null && order.Products.Any())
-                {
-                    <ul>
-                        @foreach (var product in order.Products)
-                        {
-                            <li>@product.Name</li>
-                            <li>@product.Img</li>
-							<li>@product.Price</li>
-                        }
-                    </ul>
-                }
-                else
-                {
-                    <span>Geen producten in deze bestelling.</span>
-                }
-            </li>
-        }
-    </ul>
-}
-else
-{
-    <p>Je hebt nog geen bestellingen geplaatst.</p>
-}
+
+<div class="container mt-5">
+    <h2 class="text-center mb-4 text-white">Jouw bestellingen</h2>
+
+    @if (Model.Orders != null && Model.Orders.Any())
+    {
+        <div class="row justify-content-center">
+            @foreach (var order in Model.Orders)
+            {
+                <div class="col-md-8 mb-4">
+                    <div class="card bg-dark text-white border-light shadow-lg">
+                        <div class="card-header bg-dark text-white border-light">
+                            <strong>Besteld op:</strong> @order.OrderDate.ToString("dd-MM-yyyy")
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">Producten:</h5>
+                            @if (order.Products != null && order.Products.Any())
+                            {
+                                <ul class="list-group list-group-flush">
+                                    @foreach (var product in order.Products)
+                                    {
+                                        <li class="list-group-item bg-dark text-white border-0 d-flex align-items-center">
+                                            <img src="@(product.Img != null && product.Img.Length > 0 ? $"data:image/png;base64,{Convert.ToBase64String(product.Img)}" : "https://via.placeholder.com/40x40?text=Geen+afbeelding")"
+                                                 alt="Productfoto" class="rounded me-3" style="width:40px;height:40px;object-fit:cover;" />
+                                            <span class="me-2">@product.Name</span>
+                                            <span class="ms-auto">€@product.Price</span>
+                                        </li>
+                                    }
+                                </ul>
+                            }
+                            else
+                            {
+                                <span class="text-white">Geen producten in deze bestelling.</span>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <p class="text-center text-white">Je hebt nog geen bestellingen geplaatst.</p>
+    }
+</div>

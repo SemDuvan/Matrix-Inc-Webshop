@@ -1,4 +1,40 @@
 ﻿@page
 @model KE03_INTDEV_SE_1_Base.Pages.BestellenModel
-@{
-}
+
+<link rel="stylesheet" href="~/css/winkelwagen.css" />
+<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+
+<div class="container mt-5">
+    <h2 class="text-center mb-4 text-white">Winkelwagen</h2>
+    @if (Model.Cart.Count == 0)
+    {
+        <p class="text-center text-white">Je winkelwagen is leeg.</p>
+    }
+    else
+    {
+        <table class="table bg-dark text-white border-light">
+            <thead>
+                <tr>
+                    <th>Product</th>
+                    <th>Aantal</th>
+                    <th>Prijs</th>
+                    <th>Totaal</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Cart)
+                {
+                    <tr>
+                        <td>@item.Name</td>
+                        <td>@item.Quantity</td>
+                        <td>€@item.Price</td>
+                        <td>€@(item.Price * item.Quantity)</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <form method="post">
+            <button type="submit" class="btn btn-success btn-lg mt-4 w-100">Bestelling plaatsen</button>
+        </form>
+    }
+</div>

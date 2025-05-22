@@ -1,7 +1,9 @@
 using DataAccessLayer.Interfaces;
 using DataAccessLayer.Models;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Collections.Generic;
+using System.Text.Json;
 
 namespace KE03_INTDEV_SE_1_Base.Pages
 {
@@ -12,6 +14,7 @@ namespace KE03_INTDEV_SE_1_Base.Pages
 
         public Customer? Customer { get; set; }
         public List<Product> Products { get; set; } = new();
+        public string? UserName { get; set; }
 
         public HomeModel(ICustomerRepository customerRepository, IProductRepository productRepository)
         {
@@ -21,7 +24,6 @@ namespace KE03_INTDEV_SE_1_Base.Pages
 
         public void OnGet(string? userName)
         {
-            // Haal uit session als userName niet is meegegeven
             if (string.IsNullOrEmpty(userName))
                 userName = HttpContext.Session.GetString("UserName");
 
@@ -34,10 +36,26 @@ namespace KE03_INTDEV_SE_1_Base.Pages
             UserName = userName;
         }
 
+        public IActionResult OnPostAddToCart(int productId)
+        {
+            var cartJson = HttpContext.Session.GetString("Cart");
+            var cart = string.IsNullOrEmpty(cartJson)
+                ? new List<CartItem>()
+                : JsonSerializer.Deserialize<List<CartItem>>(cartJson) ?? new List<CartItem>();
 
-        public string? UserName { get; set; }
+            var product = _productRepository.GetProductById(productId);
+            if (product != null)
+            {
+                var existing = cart.FirstOrDefault(c => c.ProductId == product.Id);
+                if (existing != null)
+                    existing.Quantity++;
+                else
+                    cart.Add(new CartItem { ProductId = product.Id, Name = product.Name, Price = product.Price, Quantity = 1 });
+            }
 
-     
-
+            HttpContext.Session.SetString("Cart", JsonSerializer.Serialize(cart));
+            TempData["CartMessage"] = "Product toegevoegd aan winkelwagen!";
+            return RedirectToPage();
+        }
     }
 }

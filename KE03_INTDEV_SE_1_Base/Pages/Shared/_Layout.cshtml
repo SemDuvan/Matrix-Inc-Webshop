@@ -36,25 +36,13 @@
                                 <a class="nav-link text-dark" asp-area="" asp-page="/Privacy">Privacy</a>
                             </li>
                             <li class="nav-item dropdown ms-auto ms-3">
-                                <a class="nav-link position-relative dropdown-toggle" href="#" id="cartDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <a class="nav-link position-relative" asp-page="/Bestellen">
                                     <span class="bi bi-cart"></span>
-                                    <span class="badge bg-danger position-absolute top-0 start-100 translate-middle" id="cart-count">0</span>
+                                    @await Html.PartialAsync("_CartItems")
                                 </a>
-                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="cartDropdown" style="min-width: 320px;" id="cart-dropdown-list">
-                                    <li class="dropdown-item text-muted">Winkelkar is leeg</li>
-                                    <li><hr class="dropdown-divider" /></li>
-                                    <li class="dropdown-item fw-bold" id="cart-total">Totaal: €0,00</li>
-                                    <li class="dropdown-item">
-                                        <form method="post" action="/Bestellen?handler=PlaatsBestelling" id="cartFormDropdown">
-                                            @Html.AntiForgeryToken()
-                                            <button type="submit" class="btn btn-primary w-100">Bestellen</button>
-                                        </form>
 
 
-
-
-                                    </li>
-                                </ul>
+                              
                                 
 
                             </li>
@@ -92,8 +80,6 @@
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    <script src="~/js/Cart.js"></script>
 
 
     @await RenderSectionAsync("Scripts", required: false)
